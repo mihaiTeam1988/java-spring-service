@@ -6,9 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
-/**
- * Core spring boot application for running the service
- */
 @SpringBootApplication
 public class JavaSpringServiceApplication {
 
