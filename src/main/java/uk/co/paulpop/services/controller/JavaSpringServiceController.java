@@ -34,7 +34,7 @@ class JavaSpringServiceController {
         LOGGER.info("Received request to say hello to {}", name);
 
         return ResponseEntity.ok(Hello.builder()
-            .message(String.format("Hello %s", name))
+            .message(String.format("Hello %s!", name))
             .build());
     }
 
