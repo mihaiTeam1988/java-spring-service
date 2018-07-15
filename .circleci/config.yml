@@ -7,7 +7,7 @@ defaults: &docker
     - image: quay.io/paulpop/docker-compose
       environment:
         APP_NAME: java-spring-service
-        IMAGE_NAME: quay.io/paulpop/java-spring-service
+        IMAGE_NAME: mihaiteam1988/java-spring-service
 
 version: 2
 jobs:
@@ -67,10 +67,10 @@ jobs:
             docker run --network container:$APP_NAME mwendler/wget -qO- \
               --retry-connrefused --tries=10 --waitretry 6 http://localhost:8080/health
       - run:
-          name: Push image to Quay
+          name: Push image to Dockerhub
           command: |
             if [[ $CIRCLE_BRANCH == 'master' ]]; then
-                docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD quay.io
+#                docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD quay.io
                 docker push $IMAGE_NAME:$CIRCLE_SHA1
                 docker push $IMAGE_NAME
             else

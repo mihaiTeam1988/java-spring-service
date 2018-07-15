@@ -83,7 +83,7 @@ public class JavaSpringServiceControllerIT {
             Hello.class);
 
         assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello Paul Pop").build()));
+        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello Paul Pop!").build()));
     }
 
     private String createURI(String uri) {

@@ -23,7 +23,7 @@ public class JavaSpringServiceControllerTest {
         ResponseEntity<Hello> response = controller.sayHello("");
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello ").build()));
+        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello !").build()));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class JavaSpringServiceControllerTest {
         ResponseEntity<Hello> response = controller.sayHello(" ");
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello  ").build()));
+        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello  !").build()));
     }
 
     @Test
@@ -39,6 +39,6 @@ public class JavaSpringServiceControllerTest {
         ResponseEntity<Hello> response = controller.sayHello("Paul Pop");
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello Paul Pop").build()));
+        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello Paul Pop!").build()));
     }
 }
