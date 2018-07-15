@@ -77,6 +77,26 @@ jobs:
                 echo Skipping this step as we are not on 'master' branch
             fi
 
+  # 4) Deploy to the development environment - in this case we just run the container with the dev variable
+  deploy-dev:
+    <<: *docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Run Docker container
+          command: docker run -e ENVIRONMENT=dev $IMAGE_NAME:$CIRCLE_SHA1
+
+  # 5) Deploy to the production environment - in this case we just run the container with the prod variable
+  deploy-prod:
+    <<: *docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Run Docker container
+          command: docker run -e ENVIRONMENT=prod $IMAGE_NAME:$CIRCLE_SHA1
+
 workflows:
   version: 2
   build-and-deploy:
@@ -88,3 +108,16 @@ workflows:
           requires:
             - build
             - test
+      - deploy-dev:
+          requires:
+            - docker
+          filters:
+            branches:
+              only: master
+      - promote:
+          type: approval
+          requires:
+            - deploy-dev
+      - deploy-prod:
+          requires:
+            - promote
