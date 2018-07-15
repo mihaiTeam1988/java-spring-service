@@ -79,9 +79,8 @@ jobs:
 
   # 4) Deploy to the development environment - in this case we just run the container with the dev variable
   deploy-dev:
-    <<: *docker
     machine:
-        enabled: true
+      enabled: true
     steps:
       - checkout
       - setup_remote_docker
