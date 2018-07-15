@@ -39,7 +39,7 @@ jobs:
           name: Run all tests and upload to Codecov
           command: |
             mvn verify
-              bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+              bash <(curl -s https://codecov.io/bash) -t 688c5fea-00d5-4cbc-ac42-d25f5ccfbb6f
       - save_cache:
           key: dependencies-{{ checksum "pom.xml" }}
           paths:

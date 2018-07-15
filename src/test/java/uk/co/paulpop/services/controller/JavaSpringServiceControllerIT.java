@@ -59,7 +59,7 @@ public class JavaSpringServiceControllerIT {
             Hello.class);
 
         assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello P").build()));
+        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello P!").build()));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class JavaSpringServiceControllerIT {
             Hello.class);
 
         assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello  ").build()));
+        assertThat(response.getBody(), equalTo(Hello.builder().message("Hello  !").build()));
     }
 
     @Test
