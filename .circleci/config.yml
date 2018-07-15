@@ -39,7 +39,7 @@ jobs:
           name: Run all tests and upload to Codecov
           command: |
             mvn verify
-              bash <(curl -s https://codecov.io/bash) -t 688c5fea-00d5-4cbc-ac42-d25f5ccfbb6f
+              bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
       - save_cache:
           key: dependencies-{{ checksum "pom.xml" }}
           paths:
@@ -70,7 +70,7 @@ jobs:
           name: Push image to Dockerhub
           command: |
             if [[ $CIRCLE_BRANCH == 'master' ]]; then
-                docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD docker.io
+                docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
                 docker push $IMAGE_NAME:$CIRCLE_SHA1
                 docker push $IMAGE_NAME
             else
