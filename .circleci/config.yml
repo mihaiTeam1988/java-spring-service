@@ -7,7 +7,7 @@ defaults: &docker
     - image: quay.io/paulpop/docker-compose
       environment:
         APP_NAME: java-spring-service
-        IMAGE_NAME: mihaiteam1988/java-spring-service
+        IMAGE_NAME: docker.io/mihaiteam1988/java-spring-service
 
 version: 2
 jobs:
