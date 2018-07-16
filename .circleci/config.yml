@@ -1,6 +1,8 @@
 defaults: &jdk
   docker:
     - image: circleci/openjdk:8-jdk
+      environment:
+        CODECOV_TOKEN: 46b4791a3bde4ceb941e6330bc44b3be
 
 defaults: &docker
   docker:
@@ -79,6 +81,7 @@ jobs:
 
   # 4) Deploy to the development environment - in this case we just run the container with the dev variable
   deploy-dev:
+    <<: *docker
     machine: true
     steps:
       - checkout
@@ -87,23 +90,20 @@ jobs:
               - "97:d5:25:f7:8e:3c:fe:91:00:51:81:31:d3:ff:54:41"
       - run:
             name: Start swarm service in Dev
-            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 "docker service create --name java-spring-service --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=dev docker.io/mihaiteam1988/java-spring-service"
+            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 "docker service create --name java-spring-service --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=dev $IMAGE_NAME:$CIRCLE_SHA1"
 
   # 5) Deploy to the production environment - in this case we just run the container with the prod variable
   deploy-prod:
     <<: *docker
+    machine: true
     steps:
       - checkout
-      - setup_remote_docker
       - add_ssh_keys:
             fingerprints:
               - "97:d5:25:f7:8e:3c:fe:91:00:51:81:31:d3:ff:54:41"
       - run:
-          name: SSH into manager node
-          command: /usr/bin/ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102
-      - run:
-          name: Run Docker container
-          command: docker service create --name java-spring-service --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=prod $IMAGE_NAME:$CIRCLE_SHA1
+            name: Start swarm service in Dev
+            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 "docker service create --name java-spring-service --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=prod $IMAGE_NAME:$CIRCLE_SHA1"
 
 workflows:
   version: 2
