@@ -86,8 +86,8 @@ jobs:
             fingerprints:
               - "97:d5:25:f7:8e:3c:fe:91:00:51:81:31:d3:ff:54:41"
       - run:
-            name: Run Docker container
-            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 && docker service create --name java-spring-service --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=dev $IMAGE_NAME:$CIRCLE_SHA1
+            name: Start swarm service in Dev
+            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 "docker service create --name java-spring-service --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=dev $IMAGE_NAME:$CIRCLE_SHA1"
 
   # 5) Deploy to the production environment - in this case we just run the container with the prod variable
   deploy-prod:
