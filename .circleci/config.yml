@@ -1,3 +1,9 @@
+version: 2
+
+environment:
+  IMAGE_NAME: docker.io/mihaiteam1988/java-spring-service
+  APP_NAME: java-spring-service
+
 defaults: &jdk
   docker:
     - image: circleci/openjdk:8-jdk
@@ -8,17 +14,9 @@ defaults: &docker
   docker:
     - image: quay.io/paulpop/docker-compose
       environment:
-        APP_NAME: java-spring-service
-        IMAGE_NAME: docker.io/mihaiteam1988/java-spring-service
+        APP_NAME: $APP_NAME
+        IMAGE_NAME: $IMAGE_NAME
 
-defaults: &defaults
-  environment:
-    IMAGE_NAME: docker.io/mihaiteam1988/java-spring-service
-  docker:
-    - image: org/ci:latest
-  working_directory:  /home/circleci/app
-
-version: 2
 jobs:
   build:
     <<: *jdk
@@ -88,7 +86,7 @@ jobs:
 
   # 4) Deploy to the development environment - in this case we just run the container with the dev variable
   deploy-dev:
-    <<: *defaults
+    machine: true
     steps:
       - checkout
       - add_ssh_keys:
@@ -100,7 +98,7 @@ jobs:
 
   # 5) Deploy to the production environment - in this case we just run the container with the prod variable
   deploy-prod:
-    <<: *defaults
+    machine: true
     steps:
       - checkout
       - add_ssh_keys:
