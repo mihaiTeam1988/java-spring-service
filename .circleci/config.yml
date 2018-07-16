@@ -1,7 +1,7 @@
 version: 2
 
 environment:
-  IMAGE_NAME_GLOBAL: docker.io/mihaiteam1988/java-spring-service
+  IMAGE_NAME_GLOBAL_GLOBAL: docker.io/mihaiteam1988/java-spring-service
   APP_NAME_GLOBAL: java-spring-service
 
 defaults: &jdk
@@ -13,9 +13,6 @@ defaults: &jdk
 defaults: &docker
   docker:
     - image: quay.io/paulpop/docker-compose
-      environment:
-        APP_NAME: $APP_NAME_GLOBAL
-        IMAGE_NAME: $IMAGE_NAME_GLOBAL
 
 jobs:
   build:
@@ -65,21 +62,21 @@ jobs:
           at: .
       - run:
           name: Build container with the git commit sha version and latest version
-          command: docker build -t $IMAGE_NAME:$CIRCLE_SHA1 -t $IMAGE_NAME .
+          command: docker build -t $IMAGE_NAME_GLOBAL:$CIRCLE_SHA1 -t $IMAGE_NAME_GLOBAL .
       - run:
           name: Start container and verify it's healthy
           command: |
             set -x
             docker-compose up -d
-            docker run --network container:$APP_NAME mwendler/wget -qO- \
+            docker run --network container:$APP_NAME_GLOBAL mwendler/wget -qO- \
               --retry-connrefused --tries=10 --waitretry 6 http://localhost:8080/health
       - run:
           name: Push image to Dockerhub
           command: |
             if [[ $CIRCLE_BRANCH == 'master' ]]; then
                 docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
-                docker push $IMAGE_NAME:$CIRCLE_SHA1
-                docker push $IMAGE_NAME
+                docker push $IMAGE_NAME_GLOBAL:$CIRCLE_SHA1
+                docker push $IMAGE_NAME_GLOBAL
             else
                 echo Skipping this step as we are not on 'master' branch
             fi
@@ -94,7 +91,7 @@ jobs:
               - "97:d5:25:f7:8e:3c:fe:91:00:51:81:31:d3:ff:54:41"
       - run:
             name: Start swarm service in Dev
-            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 "docker service create --name java-spring-service --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=dev $IMAGE_NAME:$CIRCLE_SHA1"
+            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 "docker service create --name $APP_NAME_GLOBAL --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=dev $IMAGE_NAME_GLOBAL:$CIRCLE_SHA1"
 
   # 5) Deploy to the production environment - in this case we just run the container with the prod variable
   deploy-prod:
@@ -106,7 +103,7 @@ jobs:
               - "97:d5:25:f7:8e:3c:fe:91:00:51:81:31:d3:ff:54:41"
       - run:
             name: Start swarm service in Dev
-            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 "docker service create --name java-spring-service --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=prod $IMAGE_NAME:$CIRCLE_SHA1"
+            command: ssh -o "StrictHostKeyChecking=no" docker@35.176.209.102 "docker service create --name $APP_NAME_GLOBAL --publish 80:8080 --replicas=2 --constraint 'node.role == worker' -e ENVIRONMENT=prod $IMAGE_NAME_GLOBAL:$CIRCLE_SHA1"
 
 workflows:
   version: 2
