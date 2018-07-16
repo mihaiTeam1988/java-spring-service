@@ -12,7 +12,6 @@ defaults: &docker
         IMAGE_NAME: docker.io/mihaiteam1988/java-spring-service
 
 defaults: &defaults
-  machine: true
   environment:
     IMAGE_NAME: docker.io/mihaiteam1988/java-spring-service
   docker:
