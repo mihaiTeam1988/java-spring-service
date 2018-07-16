@@ -1,8 +1,8 @@
 version: 2
 
 environment:
-  IMAGE_NAME: docker.io/mihaiteam1988/java-spring-service
-  APP_NAME: java-spring-service
+  IMAGE_NAME_GLOBAL: docker.io/mihaiteam1988/java-spring-service
+  APP_NAME_GLOBAL: java-spring-service
 
 defaults: &jdk
   docker:
@@ -14,8 +14,8 @@ defaults: &docker
   docker:
     - image: quay.io/paulpop/docker-compose
       environment:
-        APP_NAME: $APP_NAME
-        IMAGE_NAME: $IMAGE_NAME
+        APP_NAME: $APP_NAME_GLOBAL
+        IMAGE_NAME: $IMAGE_NAME_GLOBAL
 
 jobs:
   build:
